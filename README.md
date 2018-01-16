@@ -5,15 +5,15 @@ A theatre performance incorporating a sensor network used by performers to contr
 
 ## Sensors
 
-### Any analog input:
+### Analog input:
 
-https://github.com/cpethica/We-Are-Symphony/tree/master/gpio_osc_sender
+[gpio_osc_sender](https://github.com/cpethica/We-Are-Symphony/tree/master/gpio_osc_sender)
 
 Sends any changes in output of the analog pin as an integer over osc with the address "/sensor".
 
 ### Magnetometer:
 
-https://github.com/cpethica/We-Are-Symphony/tree/master/gpio_osc_sender_magnetometer
+[gpio_osc_sender_magnetometer](https://github.com/cpethica/We-Are-Symphony/tree/master/gpio_osc_sender_magnetometer)
 
 Outputs a compass heading from a HMC5883L compass.
 
