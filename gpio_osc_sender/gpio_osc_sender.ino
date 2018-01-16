@@ -28,7 +28,7 @@ void setup()
   Serial.begin(115200);
   delay(10);
   WiFi.mode(WIFI_STA);
-  
+
  // pinMode(sensorPin, INPUT);
 
   // Connect to Wi-Fi network
@@ -55,20 +55,17 @@ void loop() {
   sensorValue = analogRead(sensorPin);
   if (sensorValue != oldValue) {
     oldValue = sensorValue;
-    sendOSC(sensorValue);
-    //Serial.println(sensorValue);
+    sendOSC("/sensor", sensorValue);
    }
 }
 
-void sendOSC(unsigned int msg) {
+void sendOSC(String msg, unsigned int data) {
 
-  OSCMessage msgOUT("/s3");
-  msgOUT.add(msg);
-  Serial.println(msg);
+  OSCMessage msgOUT(msg.c_str());
+  msgOUT.add(data);
   Udp.beginPacket(outIp, outPort);
   msgOUT.send(Udp);
   Udp.endPacket();
   msgOUT.empty();
   delay(10);
 }
-
