@@ -2,7 +2,7 @@
 
 A theatre performance incorporating a sensor network used by performers to control lighting and sound.
 
-##Sensors:
+## Sensors:
 
 ESP8266 based sensors output OSC messages to a PC over wifi.
 
