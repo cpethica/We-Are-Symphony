@@ -23,6 +23,9 @@ int sensorPin = A0;    // select the input pin for the potentiometer
 unsigned int sensorValue = 0;  // variable to store the value coming from the sensor
 unsigned int oldValue  = -999;
 
+const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
+unsigned int sample;
+
 void setup()
 {
   Serial.begin(115200);
@@ -54,15 +57,36 @@ void setup()
 
 void loop() {
 
-  delay(100);
-  sensorValue = analogRead(sensorPin);
-  Serial.println(sensorValue);
   
-//  if (sensorValue != oldValue) {
-//    oldValue = sensorValue;
-//    //sendOSC(sensorValue);
-//    Serial.println(sensorValue);
-//   }
+   unsigned long startMillis= millis();  // Start of sample window
+   unsigned int peakToPeak = 0;   // peak-to-peak level
+
+   unsigned int signalMax = 0;
+   unsigned int signalMin = 1024;
+
+   // collect data for 50 mS
+   while (millis() - startMillis < sampleWindow)
+   {
+      sample = analogRead(sensorPin);
+      if (sample < 1024)  // toss out spurious readings
+      {
+         if (sample > signalMax)
+         {
+            signalMax = sample;  // save just the max levels
+         }
+         else if (sample < signalMin)
+         {
+            signalMin = sample;  // save just the min levels
+         }
+      }
+   }
+   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
+   double volts = (peakToPeak * 5.0) / 1024;  // convert to volts
+   double data = map(peakToPeak, 0, 1023, 0, 255);
+   data = constrain(data, 0, 255);
+   //Serial.println(data);
+
+   sendOSC("/sound", data);
    
 }
 
@@ -76,4 +100,5 @@ void sendOSC(String msg, unsigned int data) {
   msgOUT.empty();
   delay(10);
 }
+
 
