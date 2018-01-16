@@ -58,7 +58,7 @@ void setup()
 
   // Set calibration offset. See HMC5883L_calibration.ino
   compass.setOffset(102, 194);
-  
+
  // SENSORS:
 
 
@@ -108,7 +108,7 @@ void loop() {
   }
 
   // Convert to degrees
-  float headingDegrees = heading * 180/M_PI; 
+  float headingDegrees = heading * 180/M_PI;
 
   // Output
  // Serial.print(" Heading = ");
@@ -119,7 +119,7 @@ void loop() {
 
   //delay(100);
 
-  
+
   sensorValue = analogRead(sensorPin);
   //Serial.println(map(sensorValue, 7, 1000, 0, 255));
   if (sensorValue != oldvalue) {
@@ -134,7 +134,7 @@ void loop() {
     sendOSC("Deg", map(DegValue, 0, 360, 0, 255));
   }
 
-  
+
   unsigned int newenc = myEnc.read();
   if (newenc != oldenc) {
     oldenc = newenc;
@@ -152,4 +152,3 @@ void sendOSC(String msg, unsigned int data) {
   msgOUT.empty();
   delay(10);
 }
-
