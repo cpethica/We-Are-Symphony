@@ -156,7 +156,7 @@ byte* dataIn;
 
 // PWM control pins 
 int pwm1 = 0;   //D1 mini - D3
-int pwm2 = 2;   //D1 mini - D4
+//int pwm2 = 2;   //D1 mini - D4
 int pwm3 = 12;   //D1 mini - D6
 int pwm4 = 13;   //D1 mini - D7
 
@@ -345,9 +345,11 @@ void loop(void){
   // send DMX values to pins as PWM for LED's and other fixtures
   //////////////////////////////////////////
   
-  byte* dmxData = dmxA.getChans();
+  byte* dmxData = dmxB.getChans();
+
+  //analogWrite(LED_BUILTIN, map(dmxData[0], 0, 255, 0, 1023));
   analogWrite(pwm1, map(dmxData[0], 0, 255, 0, 1023));
-  analogWrite(pwm2, map(dmxData[1], 0, 255, 0, 1023));
+  //analogWrite(pwm2, map(dmxData[1], 0, 255, 0, 1023));
   analogWrite(pwm3, map(dmxData[2], 0, 255, 0, 1023));
   analogWrite(pwm4, map(dmxData[3], 0, 255, 0, 1023));  
   

@@ -1,23 +1,19 @@
 // OSC Sender : connects to wifi and sends OSC from GPIO to server
 
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <WiFiUdp.h>
 #include <OSCMessage.h>
-//#include <OSCBundle.h>
-
 
 //SSID of your network
-const char* ssid     = "boringname";
-const char* password = "Digisteph40br";
+const char* ssid     = "IWF Studios";
+const char* password = "omphalos";
 
 WiFiUDP Udp;                                // A UDP instance to let us send and receive packets over UDP
-const IPAddress outIp(192,168,1,64);        // remote IP of your computer
-const unsigned int outPort = 9999;          // remote port to receive OSC
-const unsigned int localPort = 8888;        // local port to listen for OSC packets (actually not used for sending)
+const IPAddress outIp(192,168,1,150);        // remote IP of your computer
+const unsigned int outPort = 57120;          // remote port to receive OSC
 
-int sensorPin = A0;    // select the input pin for the potentiometer
+int sensorPin = 32;    // select the input pin for the potentiometer
 unsigned int sensorValue = 0;  // variable to store the value coming from the sensor
-unsigned int oldValue  = -999;
 
 void setup()
 {
@@ -46,9 +42,8 @@ void setup()
 }
 
 void loop() {
-  delay(20);
-  sensorValue = analogRead(sensorPin);
-  sendOSC("/data", sensorValue);
+  delay(10);
+  sendOSC("/data", analogRead(sensorPin));
   //Serial.println(sensorValue);
 }
 
@@ -60,6 +55,6 @@ void sendOSC(String msg, unsigned int data) {
   msgOUT.send(Udp);
   Udp.endPacket();
   msgOUT.empty();
-  delay(1);
 }
+
 

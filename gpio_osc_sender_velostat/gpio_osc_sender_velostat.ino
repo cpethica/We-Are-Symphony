@@ -11,11 +11,11 @@
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(24, PIN, NEO_GRB + NEO_KHZ800);
 
 //SSID of your network
-char ssid[] = "Oddysee"; //SSID of your Wi-Fi router
-char pass[] = "123456OK"; //Password of your Wi-Fi router
+char ssid[] = "boringname"; //SSID of your Wi-Fi router
+char pass[] = "Digisteph40br"; //Password of your Wi-Fi router
 
 WiFiUDP Udp;                                // A UDP instance to let us send and receive packets over UDP
-const IPAddress outIp(192,168,1,100);        // remote IP of your computer
+const IPAddress outIp(192,168,1,64);        // remote IP of your computer
 const unsigned int outPort = 9999;          // remote port to receive OSC
 const unsigned int localPort = 8888;        // local port to listen for OSC packets (actually not used for sending)
 
@@ -58,6 +58,7 @@ void loop() {
   int val = map(sensorValue, 7, 1000, 0, 255);
   val = constrain(val, 0, 254);
   sendOSC("vel", val);
+  Serial.printf("settings heap size: %u\n", ESP.getFreeHeap());
 
   colorValue = val; 
   for (int i = 0; i<strip.numPixels(); i++){

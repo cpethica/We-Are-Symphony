@@ -14,18 +14,24 @@
 Adafruit_ADS1015 ads1015;
 
 //SSID of your network
-char ssid[] = "Oddysee"; //SSID of your Wi-Fi router
-char pass[] = "123456OK"; //Password of your Wi-Fi router
+char ssid[] = "boringname"; //SSID of your Wi-Fi router
+char pass[] = "Digisteph40br"; //Password of your Wi-Fi router
 
 WiFiUDP Udp;                                // A UDP instance to let us send and receive packets over UDP
 const IPAddress outIp(192,168,1,100);        // remote IP of your computer
 const unsigned int outPort = 9999;          // remote port to receive OSC
 const unsigned int localPort = 8888;        // local port to listen for OSC packets (actually not used for sending)
 
+WiFiUDP Udp1;                                // A UDP instance to let us send and receive packets over UDP
+const IPAddress outIp1(192,168,1,100);        // remote IP of your computer
+const unsigned int outPort1 = 9998;          // remote port to receive OSC
+const unsigned int localPort1 = 8888;        // local port to listen for OSC packets (actually not used for sending)
+
+
 int sensorPin = A0;    // select the input pin for the potentiometer
 
 // button pins
-String osc_address[] = {"b1", "b2", "b3", "b4", "b5", "b6"};
+String osc_address[] = {"/b1", "/b2", "/b3", "/b4", "/b5", "/b6"};
 
 Pushbutton button1(2);
 Pushbutton button2(0);
@@ -70,7 +76,7 @@ void setup()
 
 
 void loop() {
-  delay(100);
+ // delay(5);
   sensorValue = analogRead(sensorPin);
   if (sensorValue != oldValue) {
     oldValue = sensorValue;
@@ -94,14 +100,27 @@ void loop() {
   int16_t adc0, adc1, adc2, adc3;
   adc0 = ads1015.readADC_SingleEnded(0);
   adc1 = ads1015.readADC_SingleEnded(1);
+  adc2 = ads1015.readADC_SingleEnded(2);
+  adc3 = ads1015.readADC_SingleEnded(3);
 
-  adc0 = map(adc0, 0, 1023, 0, 255);
+  adc0 = map(adc0, 0, 1023, 0, 12);
   adc1 = map(adc1, 0, 1023, 0, 255);
+  adc2 = map(adc2, 0, 1023, 0, 255);
+  adc3 = map(adc3, 0, 1023, 0, 255);
   adc0 = constrain(adc0, 0, 255);
   adc1 = constrain(adc1, 0, 255); 
+  adc2 = constrain(adc2, 0, 255);
+  adc3 = constrain(adc3, 0, 255);
   
-  sendOSC("slider1", adc0);
-  sendOSC("slider2", adc1);
+  sendOSC("/selector", adc0);
+  sendOSC("/slider1", adc1);
+  sendOSC("/slider2", adc2);
+  sendOSC("/slider3", adc3);
+
+  sendOSC1("/selector", adc0);
+  sendOSC1("/slider1", adc1);
+  sendOSC1("/slider2", adc2);
+  sendOSC1("/slider3", adc3);
   }
 
 void sendOSC(String msg, unsigned int data) {
@@ -112,6 +131,16 @@ void sendOSC(String msg, unsigned int data) {
   msgOUT.send(Udp);
   Udp.endPacket();
   msgOUT.empty();
-  delay(10);
+}
+
+// second osc send function for alternative OSC port/IP
+void sendOSC1(String msg, unsigned int data) {
+
+  OSCMessage msgOUT(msg.c_str());
+  msgOUT.add(data);
+  Udp1.beginPacket(outIp1, outPort1);
+  msgOUT.send(Udp1);
+  Udp1.endPacket();
+  msgOUT.empty();
 }
 

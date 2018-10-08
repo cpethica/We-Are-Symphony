@@ -156,12 +156,14 @@ bool doReboot = false;
 byte* dataIn;
 
 //setup servo
-Servo myservo;
+Servo myservo1;
+Servo myservo2;
+Servo myservo3;
 
 // PWM control pins 
 int pwm1 = 13;   //D1 mini - D7   pins need to be pulled down to stop motor running if no DMX is sent!
-int pwm2 = 15;   //D1 mini - D8
-//int pwm3 = 12;   //D1 mini - D6
+int pwm2 = 14;   //D1 mini - D5
+int pwm3 = 12;   //D1 mini - D6
 //int pwm4 = 13;   //D1 mini - D7
 
 void setup(void) {
@@ -175,7 +177,9 @@ void setup(void) {
   #endif
 
   //servo
-    myservo.attach(pwm1);   //attach servo control to pin D7
+    myservo1.attach(pwm1);   //attach servo control to pin D7
+    myservo2.attach(pwm2);   //attach servo control to pin D7
+    myservo3.attach(pwm2);   //attach servo control to pin D7
 
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -353,13 +357,17 @@ void loop(void){
   //////////////////////////////////////////
   
   byte* dmxData = dmxA.getChans();
-  int pos = map(dmxData[0], 0, 255, 0, 180);  //map dmx to 0-180 degrees for servo position
-  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+  int pos1 = map(dmxData[0], 0, 255, 0, 180);  //map dmx to 0-180 degrees for servo position
+  myservo1.write(pos1);              // tell servo to go to position in variable 'pos' 
   delay(15); 
   
-//  analogWrite(pwm2, map(dmxData[1], 0, 255, 0, 1023));
-//  analogWrite(pwm3, map(dmxData[2], 0, 255, 0, 1023));
-//  analogWrite(pwm4, map(dmxData[3], 0, 255, 0, 1023));  
+  int pos2 = map(dmxData[1], 0, 255, 0, 180);  //map dmx to 0-180 degrees for servo position
+  myservo2.write(pos2);              // tell servo to go to position in variable 'pos' 
+  delay(15); 
+
+  int pos3 = map(dmxData[3], 0, 255, 0, 180);  //map dmx to 0-180 degrees for servo position
+  myservo3.write(pos3);              // tell servo to go to position in variable 'pos' 
+  delay(15); 
   
   /////////////////////////////////////////
   
